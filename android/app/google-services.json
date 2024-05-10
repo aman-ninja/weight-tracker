@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "619842515579",
+    "project_id": "track-feb3d",
+    "storage_bucket": "track-feb3d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619842515579:android:47795d1c7748beff14e8de",
+        "android_client_info": {
+          "package_name": "com.example.weight_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9AwexS3DFRPxMywNwDon-A_uI9JduHVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

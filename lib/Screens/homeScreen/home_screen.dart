@@ -1,17 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'lineChart.dart';
-import 'package:weight_tracker/Components/bottom_navigation_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:weight_tracker/DataBase/data_db.dart';
+import 'package:weight_tracker/widgets/entry_widget.dart';
 
-class HomeScreen extends StatefulWidget {
+  class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key});
-
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  Widget build(BuildContext context) {
+  final dataDb = DataDB();
+  int weight = 0;
+  String username = 'aman';
+  Future<List<Map<String, dynamic>>>? entries;
+  @override
+  void initState(){
+    super.initState();
+    fetchEntries();
+  }
+
+  void fetchEntries() {
+    setState(() {
+      entries = dataDb.getAllWeights();
+    });
+    entries?.then((value) {
+      print('Fetched entries: $value');
+    });
+  }
+  Widget build(BuildContext conqtext) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -50,6 +70,12 @@ class _HomeScreenState extends State<HomeScreen> {
               hintText: 'Enter your weight',
             ),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) {
+              setState(() {
+                weight = int.tryParse(value)!;
+                // time = DateFormat.yMd().add_jm().format(dateTime);
+              });
+            }
           ),
           actions: <Widget>[
             TextButton(
@@ -60,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                // Add your logic to handle weight entry here
+                saveEntry();
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text('Save'),
@@ -72,5 +98,10 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+  void saveEntry() {
+    dataDb.create(username: username, weight: weight).then((value) {
+      fetchEntries(); // Refresh the list of entries
+    });
   }
 }
