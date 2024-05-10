@@ -1,11 +1,28 @@
-import 'package:flutter/material.dart';
-// import 'package:weight_tracker/config/size_config.dart';
-// import 'package:weight_tracker/provider/base_view.dart';
-// import 'package:weight_tracker/view/auth_screen_view_model.dart';
-// import 'components/auth_form.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+import 'package:flutter/material.dart';
+import 'package:weight_tracker/DataBase/data_db.dart';
+import 'package:weight_tracker/Screens/homeScreen/home_screen_view.dart';
+
+class SignUpScreen extends StatefulWidget {
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final DataDB dataDB = DataDB();
+
+  String username = "";
+
+  Future<void> saveUsername(String username) async {
+    try {
+      // Call the create method of DataDB to save the username
+      await dataDB.createWithUsername(username: username);
+      // Navigate to the home screen after successful signup
+    } catch (error) {
+      // Handle any errors here
+      print('Error saving username: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,31 +78,38 @@ class SignUpScreen extends StatelessWidget {
             // AuthForm(
             //   model: model,
             // ),
-            Container(
-              color: Colors.white,
-              child: TextFormField(
-                key: ValueKey('username'),
-                validator: (value) {
-                  if (value == null || value.length <= 3) {
-                    return 'Please enter a valid username';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  icon: Icon(Icons.person),
-                  labelText: 'UserName',
-                ),
-                onSaved: (value) {
-                  // widget.model.userName = value as String;
-                },
-              ),
+        Container(
+          color: Colors.white,
+          child: TextFormField(
+            key: ValueKey('username'),
+            validator: (value) {
+              if (value == null || value.length <= 3 ) {
+                return 'Please enter a valid username';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              icon: Icon(Icons.person),
+              labelText: 'UserName',
             ),
+            onChanged: (value) {
+              setState(() {
+                username = value;
+              });
+            },
+          ),
+        ),
             SizedBox(
               height: 20,
             ),
             ElevatedButton(
               onPressed: (){
-                Navigator.pushNamed(context, '/homescreenview');
+                saveUsername(username!);
+                Navigator.pushNamed(
+                  context,
+                  '/homescreenview',
+                  arguments: {'username': username},
+                );
               },
               child: Text('Sign Up'),
               style: ElevatedButton.styleFrom(
@@ -108,5 +132,25 @@ class SignUpScreen extends StatelessWidget {
           ],
         ),
       );
+  }
+
+  void warning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Username Already Exists'),
+          content: Text('Please choose a different username.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

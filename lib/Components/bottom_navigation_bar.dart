@@ -5,20 +5,22 @@ import 'package:weight_tracker/Screens/records_screen.dart';
 import 'package:weight_tracker/widgets/entry_widget.dart';
 
 class BottomNavigation extends StatefulWidget {
+  final String username;
+  BottomNavigation({Key? key, required this.username}) : super(key: key);
   @override
-  _BottomNavigationState createState() => _BottomNavigationState();
+  _BottomNavigationState createState() => _BottomNavigationState(username: username);
 }
 
 class _BottomNavigationState extends State<BottomNavigation> {
   int _selectedIndex = 0;
-
+  final String username ;
+  _BottomNavigationState({Key? key,required this.username});
   // Define screens
-  final List<Widget> _screens = [
-    HomeScreen(),
-    EntriesList(),
+  late final List<Widget> _screens = [
+    HomeScreen(username: username),
+    EntriesList(username: username,),
     ProfileScreen(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +48,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 
   void _onItemTapped(int index) {
+    print('bottom navigation $username');
     setState(() {
       _selectedIndex = index;
     });

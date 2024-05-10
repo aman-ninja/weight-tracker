@@ -96,7 +96,7 @@ class _RecordsState extends State<Records> {
               appBar: AppBar(
                 title: Text('Records'),
               ),
-              body: EntriesList(), // Use the EntriesList widget here
+              body: EntriesList(username: username,), // Use the EntriesList widget here
             );
           },
         ),

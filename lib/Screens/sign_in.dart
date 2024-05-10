@@ -1,7 +1,40 @@
 import 'package:flutter/material.dart';
-
-class SignInScreen extends StatelessWidget {
+import 'package:weight_tracker/DataBase/data_db.dart';
+class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  final DataDB dataDB = DataDB();
+  String username = "";
+  Future<List<Map<String, dynamic>>>? entries;
+  void initState() {
+    super.initState();
+    fetchEntries();
+  }
+  void fetchEntries() {
+    setState(() {
+      entries = dataDB.getAllWeights();
+    });
+    entries?.then((value) {
+      print('Fetched entries sign in: $value');
+    });
+  }
+  Future<bool> doesUserNameExists(String username) async {
+    try {
+      // Call the DataDB function to check if the username exists
+      bool exists = await dataDB.doesUsernameExist(username);
+      return exists;
+    } catch (error) {
+      // Handle any errors here
+      print('Error checking username existence: $error');
+      return false;
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +104,8 @@ class SignInScreen extends StatelessWidget {
                 icon: Icon(Icons.person),
                 labelText: 'UserName',
               ),
-              onSaved: (value) {
-                // widget.model.userName = value as String;
+              onChanged: (value) {
+                username = value;
               },
             ),
           ),
@@ -80,8 +113,12 @@ class SignInScreen extends StatelessWidget {
             height: 20,
           ),
           ElevatedButton(
-            onPressed: (){
-              Navigator.pushNamed(context, '/homescreenview');
+            onPressed: () async {
+              if (await doesUserNameExists(username)) {
+                Navigator.pushNamed(context, '/homescreenview', arguments: {'username': username});
+              } else {
+                warning(context);
+              }
             },
             child: Text('Sign In'),
             style: ElevatedButton.styleFrom(
@@ -105,4 +142,24 @@ class SignInScreen extends StatelessWidget {
       ),
     );
   }
+  void warning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Username Doesn't Exist"),
+          content: Text('Please choose a different username.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
