@@ -54,6 +54,24 @@ class DataDB {
 
     return weights;
   }
+  Future<Map<int, int>> getWeightAndTimeByUsername(String username) async {
+    final database = await DatabaseService().database;
+    final List<Map<String, dynamic>> result = await database.query(
+      tableName,
+      columns: ['id', 'weight', 'time'], // Select only id, weight, and time columns
+      where: 'username = ?',
+      whereArgs: [username],
+      orderBy: 'time ASC',
+    );
+
+    final Map<int, int> weightAndTime = {};
+    for (final row in result) {
+      weightAndTime[row['time'] as int] = row['weight'] as int;
+    }
+
+    return weightAndTime;
+  }
+
   Future<List<Map<String, dynamic>>> getAllWeights({String? username}) async {
     final database = await DatabaseService().database;
     if (username != null) {

@@ -70,9 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       entries = dataDb.getAllWeights();
     });
-    entries?.then((value) {
-      print('Fetched entries: $value');
-    });
   }
 
   void showWeightDialog() {

@@ -48,7 +48,6 @@ class _BottomNavigationState extends State<BottomNavigation> {
   }
 
   void _onItemTapped(int index) {
-    print('bottom navigation $username');
     setState(() {
       _selectedIndex = index;
     });
