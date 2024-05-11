@@ -119,7 +119,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
       lineBarsData: [
         LineChartBarData(
           spots: spots,
-          isCurved: true,
+          isCurved: false,
           color: Colors.black,
           barWidth: 2,
           isStrokeCapRound: true,
@@ -137,16 +137,16 @@ class _LineChartSample2State extends State<LineChartSample2> {
         bottomTitles: AxisTitles(
           axisNameWidget: Text('time'),
         ),
-          leftTitles: AxisTitles(
-            axisNameWidget: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
+        leftTitles: AxisTitles(
+          axisNameWidget: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
                   'weight'
-                ),
-              ],
-            ),
-      ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
