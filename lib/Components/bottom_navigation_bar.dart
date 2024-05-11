@@ -19,7 +19,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   late final List<Widget> _screens = [
     HomeScreen(username: username),
     EntriesList(username: username,),
-    ProfileScreen(),
+    ProfileScreen(username : username),
   ];
   @override
   Widget build(BuildContext context) {

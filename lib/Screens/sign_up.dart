@@ -103,13 +103,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 20,
             ),
             ElevatedButton(
-              onPressed: (){
-                saveUsername(username!);
-                Navigator.pushNamed(
-                  context,
-                  '/homescreenview',
-                  arguments: {'username': username},
-                );
+              onPressed: () async{
+                if(await dataDB.doesUsernameExist(username)){
+                  warning(context);
+                }else{
+                  saveUsername(username!);
+                  Navigator.pushNamed(
+                    context,
+                    '/homescreenview',
+                    arguments: {'username': username},
+                  );
+                }
               },
               child: Text('Sign Up'),
               style: ElevatedButton.styleFrom(

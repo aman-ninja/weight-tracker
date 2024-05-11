@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:weight_tracker/Screens/starting_screen.dart';
-import 'package:weight_tracker/Routes/routes.dart';
+import 'package:weight_tracker/Screens/starting_screen.dart'; // Import your starting screen
+import 'package:weight_tracker/Routes/routes.dart'; // Import your route configuration file
+
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      routes: Routes.getRoute(),
+      title: 'Weight Tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      initialRoute: '/', // Set the initial route to your starting screen
+      routes: Routes.getRoute(), // Use the route configuration from your routes file
     );
   }
 }
