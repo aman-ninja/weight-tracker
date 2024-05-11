@@ -1,17 +1,12 @@
 
-# weight_tracker
+# Weight Tracker
 
-A new Flutter project.
+This is a mobile application built using the Flutter framework and Sqflite for Database.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **User Login/Signup:** Users can create an account or log in to an existing one.
+- **Weight Tracking:** Track your daily weight progress with the help of a line chart.
+- **Data Management:** Users can add, edit, and delete weight entries stored in the SQLite database.
+- **Responsive Design:** The app's design adapts to different screen sizes, providing a seamless user experience across devices.
+- **Beginner Friendly:** The codebase is well-structured and beginner-friendly, making it easy to understand and modify.
