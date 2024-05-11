@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/DataBase/data_db.dart';
+import 'package:weight_tracker/Screens/homeScreen/home_screen_view.dart';
 class SignInScreen extends StatefulWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
@@ -116,6 +117,9 @@ class _SignInScreenState extends State<SignInScreen> {
             onPressed: () async {
               if (await doesUserNameExists(username)) {
                 Navigator.pushNamed(context, '/homescreenview', arguments: {'username': username});
+                // Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView(),settings: RouteSettings(
+                //   arguments: {'username': username},
+                // ),));
               } else {
                 warning(context);
               }

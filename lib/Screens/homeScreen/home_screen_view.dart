@@ -7,8 +7,8 @@ class HomeScreenView extends StatelessWidget {
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     print('homescreenview $args');
     final String username = args?['username'] ?? '';
-    return MaterialApp(
-      home: BottomNavigation(username: username),
+    return Scaffold(
+      body: BottomNavigation(username: username),
     );
   }
 }

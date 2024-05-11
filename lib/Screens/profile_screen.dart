@@ -15,8 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp( // Add MaterialApp here
-      home: Scaffold(
+    return Scaffold(
         backgroundColor: Colors.teal,
         body: SafeArea(
           child: Column(
@@ -40,10 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.pushReplacementNamed(context, '/');
-                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> StartingScreen()));
-                  // Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);                  // Navigator.popUntil(context, ModalRoute.withName('/'));
-
+                  Navigator.pushReplacementNamed(context, '/');
                 },
                   child: Text('Sign Out'),
                 style: ElevatedButton.styleFrom(
@@ -54,7 +50,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-      ),
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weight_tracker/Screens/sign_in.dart';
 
 class StartingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title : Text('Hello')
         ),
@@ -36,7 +36,6 @@ class StartingScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 }
