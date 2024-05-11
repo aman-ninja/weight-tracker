@@ -20,9 +20,6 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() {
       entries = dataDB.getAllWeights();
     });
-    entries?.then((value) {
-      print('Fetched entries sign in: $value');
-    });
   }
   Future<bool> doesUserNameExists(String username) async {
     try {
@@ -45,22 +42,22 @@ class _SignInScreenState extends State<SignInScreen> {
       body: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
-        //crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 40,
+            height: 100,
           ),
-          // Container(
-          //   decoration: BoxDecoration(
-          //     color: Colors.white,
-          //     borderRadius: BorderRadius.circular(20.0),
-          //   ),
-          //   child: Image.asset(
-          //     'assets/images/splash_1024.png',
-          //     height: 65,
-          //     width: 63,
-          //   ),
-          // ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Image.asset(
+              'assets/icon/bar-graph.png',
+              height: 65,
+              width: 63,
+            ),
+          ),
           Text(
             'Hello',
             style: TextStyle(
@@ -71,6 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: 8,
@@ -117,9 +115,6 @@ class _SignInScreenState extends State<SignInScreen> {
             onPressed: () async {
               if (await doesUserNameExists(username)) {
                 Navigator.pushNamed(context, '/homescreenview', arguments: {'username': username});
-                // Navigator.push(context,MaterialPageRoute(builder: (context)=>HomeScreenView(),settings: RouteSettings(
-                //   arguments: {'username': username},
-                // ),));
               } else {
                 warning(context);
               }
@@ -130,18 +125,6 @@ class _SignInScreenState extends State<SignInScreen> {
               backgroundColor: Colors.white, // foreground
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     'By tapping SignUp I agree to Terms of service.Privacy Policy and User Agreement. ',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       color: Colors.white,
-          //       fontWeight: FontWeight.w500,
-          //       fontSize: 13,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

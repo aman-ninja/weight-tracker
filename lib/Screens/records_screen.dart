@@ -1,50 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/DataBase/data_db.dart';
-import 'package:weight_tracker/widgets/entry_widget.dart';
 
 class Records extends StatefulWidget {
-  const Records({super.key});
+  final String username;
+  Records({required this.username});
 
   @override
-  State<Records> createState() => _RecordsState();
+  State<Records> createState() => _EntriesListState(username: username);
 }
 
-class _RecordsState extends State<Records> {
-  final dataDb = DataDB();
-  int weight = 0;
-  String username = 'aman';
-  Future<List<Map<String, dynamic>>>? entries;
+class _EntriesListState extends State<Records> {
+  final String username;
+  _EntriesListState({required this.username});
+  Future<Map<int, int>>? _entriesFuture;
+  final DataDB dataDB = DataDB();
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    fetchEntries();
+    _fetchEntries();
   }
 
-  void fetchEntries() {
-    setState(() {
-      entries = dataDb.getAllWeights();
-    });
-    entries?.then((value) {
-      print('Fetched entries: $value');
+  void _fetchEntries() {
+    _entriesFuture = DataDB().getWeightAndTimeByUsername(widget.username);
+  }
+  void printEntries() {
+    _entriesFuture?.then((Map<int, int> entries) {
+      entries.forEach((key, value) {
+        print('Key: $key, Value: $value');
+      });
+    }).catchError((error) {
+      print('Error fetching entries: $error');
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Records'),
+        title: Text('Entries list'),
       ),
-      body: ElevatedButton(
-        onPressed: showWeightDialog, // Call showWeightDialog when button is pressed
-        child: Text('Add Weight'),
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white, // background
-          backgroundColor: Colors.blue, // foreground
-        ),
+      body: FutureBuilder<Map<int, int>>(
+        future: _entriesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final entries = snapshot.data!.entries.toList();
+
+            return ListView.builder(
+              itemCount: entries.length,
+              itemBuilder: (context, index) {
+                final entry = entries[index];
+                final weight = entry.value;
+                final time = entry.key;
+                final formattedTime = _formatTime(time); // Format the time
+
+                return ListTile(
+                  title: Text('Weight: $weight'),
+                  subtitle: Text('Time: $formattedTime'), // Display formatted time
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.edit),
+                        onPressed: () {
+                          _showWeightDialogEdit(context, entry.key);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          DataDB().delete(time: entry.key).then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Entry deleted'),
+                            ));
+                            setState(() {
+                              _fetchEntries();
+                            });// Refresh entries after deletion
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          } else {
+            return Center(child: Text('No entries found.'));
+          }
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showWeightDialog();
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
   void showWeightDialog() {
+    // getUsernameFromArguments();
+    int weight=0;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -56,10 +114,8 @@ class _RecordsState extends State<Records> {
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               onChanged: (value) {
-                // dateTime = DateTime.now();
                 setState(() {
                   weight = int.tryParse(value)!;
-                  // time = DateFormat.yMd().add_jm().format(dateTime);
                 });
               }
           ),
@@ -72,7 +128,7 @@ class _RecordsState extends State<Records> {
             ),
             ElevatedButton(
               onPressed: () {
-                saveEntry();
+                saveEntry(username,weight);
                 Navigator.of(context).pop(); // Close the dialog
               },
               child: Text('Save'),
@@ -85,22 +141,69 @@ class _RecordsState extends State<Records> {
       },
     );
   }
-  void saveEntry() {
-    dataDb.create(username: username, weight: weight).then((value) {
-      fetchEntries(); // Refresh the list of entries
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context){
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Records'),
-              ),
-              body: EntriesList(username: username,), // Use the EntriesList widget here
-            );
-          },
-        ),
-      );
+  void saveEntry(String username,int weight) {
+    dataDB.create(username: username, weight: weight).then((value) {
+      setState(() {
+        _fetchEntries();
+      });
+      // Refresh the list of entries
     });
+  }
+
+  void _showWeightDialogEdit(BuildContext context, int index) {
+    int weight = 0;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Enter Weight'),
+          content: TextField(
+            decoration: InputDecoration(
+              hintText: 'Enter your weight',
+            ),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) {
+              setState(() {
+                weight = int.tryParse(value) ?? 0;
+              });
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                DataDB().update(time: index, weight: weight).then((_) {
+                  Navigator.of(context).pop(); // Close the dialog
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Entry updated'),
+                  ));
+                  setState(() {
+                    _fetchEntries();
+                  });
+                  // Refresh entries after update
+                });
+              },
+              child: Text('Save'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue, // background color
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String _formatTime(int timestamp) {
+    // Convert timestamp to DateTime
+    final dateTime = DateTime.fromMicrosecondsSinceEpoch(timestamp);
+    // Format DateTime to desired format
+    final formattedTime = '${dateTime.day}/${dateTime.month}/${dateTime.year} ${dateTime.hour}:${dateTime.minute}';
+    return formattedTime;
   }
 }

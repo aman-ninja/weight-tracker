@@ -35,19 +35,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 40,
+              height: 100,
             ),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(20.0),
-            //   ),
-            //   child: Image.asset(
-            //     'assets/images/splash_1024.png',
-            //     height: 65,
-            //     width: 63,
-            //   ),
-            // ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: Image.asset(
+                'assets/icon/bar-graph.png',
+                height: 65,
+                width: 63,
+              ),
+            ),
             Text(
               'Hello',
               style: TextStyle(

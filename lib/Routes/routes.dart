@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:weight_tracker/Screens/homeScreen/home_screen.dart';
 import 'package:weight_tracker/Screens/homeScreen/home_screen_view.dart';
 import 'package:weight_tracker/Screens/sign_up.dart';
 import 'package:weight_tracker/Screens/sign_in.dart';

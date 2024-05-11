@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 import 'database_service.dart';
-import 'database.dart';
 
 class DataDB {
   final tableName = 'weights';
@@ -97,22 +96,24 @@ class DataDB {
     );
     return result.isNotEmpty ? result.first : null;
   }
-  Future<int> update({required int id, required int weight}) async {
+  Future<int> update({required int time, required int weight}) async {
     final database = await DatabaseService().database;
-    return await database.update(
+    final result = await database.update(
       tableName,
       {'weight': weight},
       conflictAlgorithm: ConflictAlgorithm.rollback,
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'time = ?',
+      whereArgs: [time],
     );
+    print('update check $result');
+    return result;
   }
-  Future<int> delete({required int id}) async {
+  Future<int> delete({required int time}) async {
     final database = await DatabaseService().database;
     return await database.delete(
       tableName,
-      where: 'id = ?',
-      whereArgs: [id],
+      where: 'time = ?',
+      whereArgs: [time],
     );
   }
 }

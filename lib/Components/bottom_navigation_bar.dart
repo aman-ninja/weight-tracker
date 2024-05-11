@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:weight_tracker/Screens/homeScreen/home_screen.dart';
 import 'package:weight_tracker/Screens/profile_screen.dart';
 import 'package:weight_tracker/Screens/records_screen.dart';
-import 'package:weight_tracker/widgets/entry_widget.dart';
 
 class BottomNavigation extends StatefulWidget {
   final String username;
@@ -18,7 +17,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
   // Define screens
   late final List<Widget> _screens = [
     HomeScreen(username: username),
-    EntriesList(username: username,),
+    Records(username: username,),
     ProfileScreen(username : username),
   ];
   @override

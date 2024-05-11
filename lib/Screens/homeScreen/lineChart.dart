@@ -1,13 +1,12 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:weight_tracker/DataBase/data_db.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
-import 'package:weight_tracker/DataBase/data_db.dart';
+import 'package:intl/intl.dart';
 
 class LineChartSample2 extends StatefulWidget {
   final String username;
-  LineChartSample2({Key? key, required this.username}) : super(key: key);
+
+  LineChartSample2({required this.username});
 
   @override
   _LineChartSample2State createState() => _LineChartSample2State(username: username);
@@ -18,7 +17,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
   final dataDb = DataDB();
   late Future<Map<int, int>> entries;
 
-  _LineChartSample2State({Key? key, required this.username});
+  _LineChartSample2State({required this.username});
 
   void initState() {
     super.initState();
@@ -55,13 +54,13 @@ class _LineChartSample2State extends State<LineChartSample2> {
                 aspectRatio: 1.70,
                 child: Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      color: Theme.of(context).primaryColor),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(18),
+                    ),
+                    color: Colors.cyanAccent,
+                  ),
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        right: 18.0, left: 12.0, top: 24, bottom: 12),
+                    padding: const EdgeInsets.only(right: 18.0, left: 12.0, top: 24, bottom: 12),
                     child: LineChart(
                       mainData(data),
                     ),
@@ -75,9 +74,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
                   onPressed: () {},
                   child: Text(
                     'avg',
-                    style: TextStyle(
-                        fontSize: 12,
-                        color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
+                    style: TextStyle(fontSize: 12, color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white),
                   ),
                 ),
               ),
@@ -109,11 +106,12 @@ class _LineChartSample2State extends State<LineChartSample2> {
         },
       ),
       borderData: FlBorderData(
-          show: true,
-          border: Border.all(
-            color: Colors.white,
-            width: 2,
-          )),
+        show: true,
+        border: Border.all(
+          color: Colors.white,
+          width: 2,
+        ),
+      ),
       minX: 0,
       maxX: data.isNotEmpty ? data.keys.reduce((a, b) => a > b ? a : b).toDouble() : 11,
       minY: 0,
@@ -122,18 +120,34 @@ class _LineChartSample2State extends State<LineChartSample2> {
         LineChartBarData(
           spots: spots,
           isCurved: true,
-          color: gradientColors.first,
-          barWidth: 5,
+          color: Colors.black,
+          barWidth: 2,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
           ),
           belowBarData: BarAreaData(
             show: true,
-            color: gradientColors.last,
+            color: Colors.transparent,
           ),
         ),
       ],
+      titlesData: FlTitlesData(
+        show: true,
+        bottomTitles: AxisTitles(
+          axisNameWidget: Text('time'),
+        ),
+          leftTitles: AxisTitles(
+            axisNameWidget: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'weight'
+                ),
+              ],
+            ),
+      ),
+      ),
     );
   }
 }
