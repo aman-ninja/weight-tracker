@@ -30,7 +30,7 @@ This is a mobile application built using the Flutter framework and Sqflite for D
     <p>Sign In Screen</p>
   </div>
   <div>
-    <img src="screenshots/8.jpg" alt="Screenshot 1" width="150">
+    <img src="screenshots/7.jpg" alt="Screenshot 1" width="150">
     <p>Sign Up Screen</p>
   </div>
   <div>
